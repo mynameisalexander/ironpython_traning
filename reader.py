@@ -12,9 +12,10 @@ ex = Excel.ApplicationClass()
 #ex.Visible = True
 ex.DisplayAlerts = False
 
-path = "C:/Devel/ironpython_traning/data/"
 
+path  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data\\")
 file = path + "{0}".format(os.listdir(path)[0])
+
 
 workbook = ex.Workbooks.Open(file)
 ws = workbook.Worksheets[1]
@@ -22,13 +23,9 @@ ws = workbook.Worksheets[1]
 
 testdata = []
 
+
 for i in range(1, 7):
-    testdata = ws.Rows[i].Value2[0,0] # - не наполняется массив данными из excel
-    #testdata = Group(ws.Rows[i].Value2[0,0])
-    print(type(testdata))
-
-
-@pytest.mark.parametrize("group", testdata)
-def test_create_groups(group):
-    pass
-
+    if ws.Rows[i].Value2[0,0] == None:
+        testdata.append(Group(""))
+        continue
+    testdata.append(Group(ws.Rows[i].Value2[0,0])) # сразу создаю ряд объектов которые потом смогу использовать для теста по созданию групп
